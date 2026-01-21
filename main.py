@@ -45,6 +45,7 @@ class Cafe(db.Model):
 
     @staticmethod
     def to_json(self):
+        print(f'self={self}')
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
 with app.app_context():
@@ -89,6 +90,33 @@ def get_by_location(location):
     finally:
         db.session.close()
 
+def create(cafe):
+    try:
+        cafe_entry = Cafe(**cafe)
+        db.session.add(cafe_entry)
+        db.session.commit()
+        return True
+    except Exception as e:
+        print(f'Error saving cafe {cafe}:  {e}')
+        return False
+    finally:
+        db.session.close()
+
+def update_coffee_price(cafe_id, updated_coffee_price):
+    try:
+        # cafe = db.session.query(Cafe).get(cafe_id)
+        cafe = db.session.get(Cafe, cafe_id)
+        if cafe:
+            cafe.coffee_price = updated_coffee_price
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        print(f'Error updating cafe with id {cafe_id}:  {e}')
+        return False
+    finally:
+        db.session.close()
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -118,21 +146,67 @@ def cafe_random():
     random_id = random.choice(id_list)
     cafe = get_by_id(random_id)
     # return Cafe.to_json(cafe)
-    return jsonify({"cafe": Cafe.to_json(cafe)})
+    return jsonify({"cafe": Cafe.to_json(cafe)}), 200
 
 @app.route("/cafe/all", methods=['GET'])
 def cafe_all():
-    cafe_all = get_all()
+    cafe_all_db = get_all()
     cafe_all_json = []
-    for cafe in cafe_all:
+    for cafe in cafe_all_db:
         cafe_all_json.append(Cafe.to_json(cafe))
-    return jsonify({"cafe_all": cafe_all_json})
+    return jsonify({"cafe_all": cafe_all_json}), 200
 
 @app.route("/cafe/search", methods=['GET'])
 def cafe_search():
+    cafe_all_json = []
     query_location = request.args.get("location")
-    cafe = get_by_location(query_location)
-    return jsonify({"cafe": Cafe.to_json(cafe)})
+    print(f'query_location={query_location}')
+    cafe_list = get_by_location(query_location)
+    if not cafe_list:
+        return jsonify({"error": {"Not Found": "Sorry, we don't have a cafe at that location."}}), 200
+    for cafe in cafe_list:
+        cafe_all_json.append(Cafe.to_json(cafe))
+    return jsonify({"cafe_all": cafe_all_json}), 200
+
+"""
+request
+{
+    "can_take_calls": true, 
+    "coffee_price": "$1.80", 
+    "has_sockets": true, 
+    "has_toilet": true, 
+    "has_wifi": true, 
+    "location": "Shoreditch",
+    "name": "My Cafe", 
+    "seats": "30+", 
+    "map_url": "https://g.page/acehotellondon?share", 
+    "img_url": "https://lh3.googleusercontent.com/p/AF1QipP_NbZH7A1fIQyp5pRm1jOGwzKsDWewaxka6vDt=s0"
+}
+response
+{
+    "response": {
+        "success": "Successfully added the new cafe."
+    }
+}
+"""
+@app.route("/cafe/add", methods=['POST'])
+def cafe_add():
+    # silent=True prevents the app from crashing if the JSON is malformed
+    new_data = request.get_json(silent=True)
+    if not new_data:
+        return jsonify(error={"Bad Request": "No JSON data provided or invalid JSON format."}), 400
+    if create(new_data):
+        return jsonify({"response": {"success": "Successfully added the new cafe."}}), 200
+    else:
+        return jsonify({"response": {"error": "Could not create new cafe."}}), 200
+
+@app.route("/cafe/update-coffee-price/<int:cafe_id>", methods=['PATCH'])
+def cafe_update_coffe_price(cafe_id):
+    new_price = request.args.get("new_price")
+    if update_coffee_price(cafe_id, new_price):
+        return jsonify({"success": "price updated."}), 200
+    else:
+        return jsonify({"error": {"message": f"cafe with id {cafe_id} not found."}}), 404
 
 # HTTP GET - Read Record
 
