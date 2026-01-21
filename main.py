@@ -188,6 +188,7 @@ response
         "success": "Successfully added the new cafe."
     }
 }
+return HTTP_201 indicating that a new resource was created
 """
 @app.route("/cafe/add", methods=['POST'])
 def cafe_add():
@@ -196,9 +197,9 @@ def cafe_add():
     if not new_data:
         return jsonify(error={"Bad Request": "No JSON data provided or invalid JSON format."}), 400
     if create(new_data):
-        return jsonify({"response": {"success": "Successfully added the new cafe."}}), 200
+        return jsonify({"response": {"success": "Successfully added the new cafe."}}), 201
     else:
-        return jsonify({"response": {"error": "Could not create new cafe."}}), 200
+        return jsonify({"response": {"error": "Could not create new cafe."}}), 500
 
 @app.route("/cafe/update-coffee-price/<int:cafe_id>", methods=['PATCH'])
 def cafe_update_coffe_price(cafe_id):
