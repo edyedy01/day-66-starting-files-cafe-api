@@ -1,0 +1,162 @@
+{
+  "info": {
+    "_postman_id": "0d215a75-1e51-40b9-9c28-af4635fab93f",
+    "name": "python-testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38795669"
+  },
+  "item": [
+    {
+      "name": "/api/mtg/add-card",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"some name\", \"quantity\": 1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/mtg/add-card",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "mtg",
+            "add-card"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "random",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/cafe/random",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "cafe",
+            "random"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/cafe/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "cafe",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "search",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/cafe/search?location=ireland",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "cafe",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "location",
+              "value": "ireland"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/cafe/add",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"can_take_calls\": true, \r\n    \"coffee_price\": \"$1.80\", \r\n    \"has_sockets\": true, \r\n    \"has_toilet\": true, \r\n    \"has_wifi\": true, \r\n    \"location\": \"Shoreditch\",\r\n    \"name\": \"My Cafe\", \r\n    \"seats\": \"30+\", \r\n    \"map_url\": \"https://g.page/acehotellondon?share\", \r\n    \"img_url\": \"https://lh3.googleusercontent.com/p/AF1QipP_NbZH7A1fIQyp5pRm1jOGwzKsDWewaxka6vDt=s0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/cafe/add",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "cafe",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/cafe/update-coffee-price/800?new_price=$1.65",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "cafe",
+            "update-coffee-price",
+            "800"
+          ],
+          "query": [
+            {
+              "key": "new_price",
+              "value": "$1.65"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
