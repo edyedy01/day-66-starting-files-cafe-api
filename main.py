@@ -55,7 +55,7 @@ def get_all():
     try:
         return db.session.query(Cafe).all()
     except Exception as e:
-        print(f'Error retrieving cafe {id}:  {e}')
+        print(f'Error retrieving all Cafe entries:  {e}')
         return None
     finally:
         db.session.close()
